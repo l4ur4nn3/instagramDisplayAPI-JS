@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Instagram Feed</title>
+  <style>
+    /* CSS styles for the Instagram feed */
+    .instagram-feed {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .instagram-feed img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="instagram-feed"></div>
+
+  <script>
+      // Access token for Instagram API - See the README
+      const accessToken = 'insertYoursHere';
+
+    // Fetch the user's ID using the access token
+    fetch(`https://graph.instagram.com/me?fields=id&access_token=${accessToken}`)
+      .then(response => response.json())
+      .then(data => {
+        const userId = data.id;
+        console.log('User ID:', userId);
+      })
+      .catch(error => {
+        console.error('An error occurred:', error);
+      });
+    
+    // User ID for the Instagram account - See the README
+    const userId = 'insertYoursHere';
+
+    // Fetch the media (images/videos) associated with the user ID
+    fetch(`https://graph.instagram.com/${userId}/media?fields=id,media_type,media_url,thumbnail_url&access_token=${accessToken}`)
+      .then(response => response.json())
+      .then(data => {
+        const feedContainer = document.querySelector('.instagram-feed');
+
+        // Iterate through each media item and display it as an image
+        data.data.forEach(media => {
+          const image = document.createElement('img');
+          image.src = media.media_url;
+          feedContainer.appendChild(image);
+        });
+      })
+      .catch(error => {
+        console.error('An error occurred:', error);
+      });
+    console.log(accessToken);
+    console.log(userId);
+    
+  </script>
+</body>
+</html>
